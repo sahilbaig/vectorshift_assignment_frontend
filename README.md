@@ -1,70 +1,43 @@
-# Getting Started with Create React App
+# HubSpot Integration Frontend Documentation
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+The `HubspotIntegration` component is a React-based UI component that allows users to connect their application to HubSpot using OAuth 2.0. It handles the OAuth flow, including opening the authorization window, polling for completion, and storing the retrieved credentials.
 
-In the project directory, you can run:
+This component is built using:
 
-### `npm start`
+- **React** for the UI.
+- **Material-UI (MUI)** for styling and components.
+- **Axios** for making HTTP requests to the backend.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Backend Integration
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+The frontend interacts with the backend through the following endpoints:
 
-### `npm test`
+POST /integrations/hubspot/authorize
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Initiates the OAuth flow and returns the authorization URL.
 
-### `npm run build`
+POST /integrations/hubspot/credentials
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Fetches the OAuth credentials after the flow is complete.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Flow
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+User clicks the "Connect to HubSpot" button.
 
-### `npm run eject`
+Frontend sends a request to /integrations/hubspot/authorize to get the authorization URL.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+A new window opens with the HubSpot authorization page.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+After the user completes the OAuth flow, the window closes.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Frontend polls for the window closure and fetches credentials from /integrations/hubspot/credentials.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Credentials are stored in the parent component's state.
 
-## Learn More
+## Error Handling
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+If the OAuth flow fails, an error message is displayed using alert.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+If the credentials are not found, the user is notified.
